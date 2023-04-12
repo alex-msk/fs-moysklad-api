@@ -23,12 +23,14 @@ class MoySkladHttpClient:
     def __init__(
             self, login: str, password: str,
             pos_token: Optional[str] = None,
+            token: Optional[str] = None,
             version: str = '1.2',
             pos_version: str = '1.0',
     ) -> None:
         self._login = login
         self._password = password
         self._pos_token = pos_token
+        self._token = token
         self._pre_request_sleep_time: float = 200
         self._proxies = None
 
@@ -123,9 +125,14 @@ class MoySkladHttpClient:
                 password = self._pos_token
             endpoint = self._pos_endpoint
 
-        auth = HTTPBasicAuth(self._login, password)
+        auth=None
+        if self._login and password:
+            auth = HTTPBasicAuth(self._login, password)
 
         headers = {}
+
+        if self._token:
+            headers['Authorization'] = f'Bearer {self._token}'
         if options.format_millisecond:
             headers['X-Lognex-Format-Millisecond'] = 'true'
         if options.disable_webhooks_dispatch:

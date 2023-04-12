@@ -10,14 +10,14 @@ from .urls import ApiUrlRegistry
 class MoySklad:
     _instances: dict = {}
 
-    def __init__(self, login: str, password: str, pos_token: str,
+    def __init__(self, login: str, password: str, pos_token: str, token: str, 
                  hash_code: str) -> None:
-        self._client = MoySkladHttpClient(login, password, pos_token)
+        self._client = MoySkladHttpClient(login, password, pos_token, token=token)
         self._methods = ApiUrlRegistry()
         self._hash_code = hash_code
 
     @classmethod
-    def get_instance(cls, login: str, password: str,
+    def get_instance(cls, login: str, password: str, token: Optional[str] = None,
                      pos_token: Optional[str] = None) -> MoySklad:
         hash_code = crc32(f'{login}{password}'.encode()) & 0xffffffff
         if not cls._instances.get(hash_code):
@@ -25,6 +25,7 @@ class MoySklad:
                 login=login,
                 password=password,
                 pos_token=pos_token,
+                token=token,
                 hash_code=hash_code,
             )
         return cls._instances[hash_code]
