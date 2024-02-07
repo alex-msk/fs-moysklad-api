@@ -34,8 +34,8 @@ class MoySkladHttpClient:
         self._pre_request_sleep_time: float = 200
         self._proxies = None
 
-        self._endpoint = f'https://online.moysklad.ru/api/remap/{version}/'
-        self._pos_endpoint = f'https://online.moysklad.ru/api/posap/{pos_version}/'
+        self._endpoint = f'https://api.moysklad.ru/api/remap/{version}/'
+        self._pos_endpoint = f'https://api.moysklad.ru/api/posap/{pos_version}/'
 
     def set_pos_token(self, pos_token: str) -> None:
         self._pos_token = pos_token
